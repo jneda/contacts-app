@@ -19,11 +19,44 @@ app.get("/api/contacts", async (req, res) => {
 
 app.post("/api/contacts", async (req, res) => {
   try {
-    const { first: firstName, last: lastName, email } = req.body;
+    const { firstName, lastName, email } = req.body;
     const contact = await db.Contact.create({ firstName, lastName, email });
-    return res.send(contact);
+    return res.status(201).send(contact);
   } catch (err) {
     console.error("An error occurred posting a contact:", JSON.stringify(err));
+    return res.status(500).send(JSON.stringify(err));
+  }
+});
+
+app.put("/api/contacts/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    let contact = await db.Contact.findByPk(id);
+
+    if (!contact) {
+      return res.status(404).send({ message: "Could not find contact." });
+    }
+
+    const { firstName, lastName, email } = req.body;
+    contact = await contact.update({ firstName, lastName, email });
+    return res.send(contact);
+  } catch (err) {
+    console.error("An error occurred updating a contact:", JSON.stringify(err));
+    return res.status(500).send(JSON.stringify(err));
+  }
+});
+
+app.delete("/api/contacts/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    let contact = await db.Contact.findByPk(id);
+    if (!contact) {
+      return res.status(404).send({ message: "Could not find contact." });
+    }
+    contact = await contact.destroy();
+    return res.send(contact);
+  } catch (err) {
+    console.error("An error occurred deleting a contact:", JSON.stringify(err));
     return res.status(500).send(JSON.stringify(err));
   }
 });

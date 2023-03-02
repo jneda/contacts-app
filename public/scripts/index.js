@@ -10,7 +10,7 @@ async function loadContacts() {
       return (
         html +
         `<li>
-          ${contact.firstName} ${contact.lastName}: ${contact.email}
+          #${contact.id} - ${contact.firstName} ${contact.lastName}: ${contact.email}
         </li>`
       );
     }, "");
