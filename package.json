@@ -6,6 +6,9 @@
     "sequelize-cli": "^6.6.0",
     "sqlite3": "^5.1.4"
   },
+  "scripts": {
+    "dev": "nodemon --watch . ./app.js"
+  },
   "devDependencies": {
     "nodemon": "^2.0.20"
   }
